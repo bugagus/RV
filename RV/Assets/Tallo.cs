@@ -11,21 +11,36 @@ public class Tallo : MonoBehaviour
     [SerializeField] Mesh meshTallo;
     [SerializeField] Mesh meshCuerda;
     [SerializeField] Mesh meshHacha;
-    // Start is called before the first frame update
+    Color colorOriginal;
+    Color colorAtenuado;
+    GameObject objetoColision;
+    
     void Start()
     {
+        ActionManager.current.iniciarCrafteo += EntrarModoCrafteo;
+        ActionManager.current.terminarCrafteo += SalirModoCrafteo;
+        colorOriginal =  GetComponent<MeshRenderer>().material.color;
+        GetComponent<MeshFilter>().mesh = meshTallo;
         construccion = false;
     }
 
-    public void ModeloAtenuado(){
+    public void SetAtenuado(){
+        GetComponent<MeshRenderer>().material.color = colorAtenuado;
     }
 
-    public void ModeloNormal(){
-        GetComponent<MeshFilter>().mesh = meshTallo;
+    public void SetNormal(){
+        GetComponent<MeshRenderer>().material.color = colorOriginal;
     }
-    public void JuntarTallos(){
+    public void CrearCuerda(GameObject objetoColision){
         gameObject.tag = "Cuerda";
         GetComponent<MeshFilter>().mesh = meshCuerda;
+        Destroy(objetoColision);
+    }
+
+    public void CrearHacha(GameObject objetoColision){
+        Destroy(objetoColision);
+        gameObject.tag = "Hacha";
+        GetComponent<MeshFilter>().mesh = meshHacha;
     }
 
     public void EntrarModoCrafteo(){
@@ -39,20 +54,18 @@ public class Tallo : MonoBehaviour
     public void CortarTallo(){
         G.trackPosition = true;
         G.trackRotation = true;
+        
     }
 
     void OnCollisionEnter(Collision collision){
         if(construccion){
             if(collision.gameObject.tag == "Tallo" && gameObject.tag == "Tallo"){
-                GameObject objetoColision = collision.gameObject;
-                Destroy(objetoColision);
-                JuntarTallos();
+                objetoColision = collision.gameObject;
+                CrearCuerda(objetoColision);
             }
             if(collision.gameObject.tag == "Hacha_Aux" && gameObject.tag == "Cuerda"){
-                GameObject objetoColision = collision.gameObject;
-                Destroy(objetoColision);
-                gameObject.tag = "Hacha";
-                GetComponent<MeshFilter>().mesh = meshHacha;
+                objetoColision = collision.gameObject;
+                CrearHacha(objetoColision);
             }
         }else{
             if(collision.gameObject.tag == "Cuchillo" && gameObject.tag == "Tallo"){

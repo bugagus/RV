@@ -8,18 +8,22 @@ public class Rama : MonoBehaviour
 {
 
     public XRGrabInteractable G;
-
-    [SerializeField] Mesh atenuado;
-    // Start is called before the first frame update
+    Color colorOriginal;
+    Color colorAtenuado;
+    [SerializeField] Mesh meshRama;
+    
     void Start()
     {
-        
+        GetComponent<MeshFilter>().mesh = meshRama;
+        colorOriginal =  GetComponent<MeshRenderer>().material.color;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void SetAtenuado(){
+        GetComponent<MeshRenderer>().material.color = colorAtenuado;
+    }
+
+    public void SetNormal(){
+        GetComponent<MeshRenderer>().material.color = colorOriginal;
     }
 
     public void CortarRama(){
