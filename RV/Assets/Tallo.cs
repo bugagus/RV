@@ -20,7 +20,7 @@ public class Tallo : MonoBehaviour
         ActionManager.current.iniciarCrafteo += EntrarModoCrafteo;
         ActionManager.current.terminarCrafteo += SalirModoCrafteo;
         colorOriginal =  GetComponent<MeshRenderer>().material.color;
-        GetComponent<MeshFilter>().mesh = meshTallo;
+        //GetComponent<MeshFilter>().mesh = meshTallo;
         construccion = false;
     }
 
